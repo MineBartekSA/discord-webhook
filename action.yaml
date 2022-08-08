@@ -120,7 +120,6 @@ runs:
         then
           DATA="{${DATA:2}"
         fi
-        echo "::notice::$DATA,\"content\":\"$CONTENT\"}" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g'
         echo "$DATA,\"content\":\"$CONTENT\"}" | \
         sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' | \
         curl -i \
