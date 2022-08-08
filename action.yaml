@@ -1,5 +1,10 @@
-name: 'Discord Webhook Action'
-description: "Github Actions for sending messages through Discord's Webhooks"
+name: 'Composite Discord Webhooks'
+description: "A composite Github Action for sending messages through Discord's Webhooks"
+author: MineBartekSA
+
+branding:
+  icon: 'message-square'
+  color: 'orange'
 
 inputs:
   webhook:
