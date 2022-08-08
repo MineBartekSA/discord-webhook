@@ -12,3 +12,4 @@ jobs:
         with:
           webhook: ${{ secrets.WEBHOOK }}
           content: Hello
+          username: Testing

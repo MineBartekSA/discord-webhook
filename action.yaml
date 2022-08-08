@@ -29,30 +29,30 @@ runs:
       shell: bash
       env:
         CONTENT: ${{ inputs.content }}
-      run: echo -n "{\"content\":\"$CONTENT\"" >> /tmp/data
+      run: echo "DATA={\"content\":\"$CONTENT\"" >> $GITHUB_ENV
     - name: 'Handle username'
       if: ${{ inputs.username != '' }}
       shell: bash
       env:
         USERNAME: ${{ inputs.username }}
-      run: echo -n ",\"username\":\"$USERNAME\"" >> /tmp/data
+      run: echo "DATA=$DATA,\"username\":\"$USERNAME\"" >> $GITHUB_ENV
     - name: 'Handle avatar_url'
       if: ${{ inputs.avatar_url != '' }}
       shell: bash
       env:
         AVATAR_URL: ${{ inputs.avatar_url }}
-      run: echo -n ",\"avatar_url\":\"$AVATAR_URL\"" >> /tmp/data
+      run: echo "DATA=$DATA,\"avatar_url\":\"$AVATAR_URL\"" >> $GITHUB_ENV
     - name: 'Handle tts'
       if: ${{ inputs.tts == true }} # TODO: check
       shell: bash
-      run: echo -n ",\"tts\":true" >> /tmp/data
+      run: echo "DATA=$DATA,\"tts\":true" >> $GITHUB_ENV
     - name: 'Send webhook message'
       shell: bash
       run: |
-        echo -n "}" >> /tmp/data
+        DATA="$DATA}"
         curl -i \
           -H "Accept: application/json" \
           -H "Content-Type: application/json" \
           -X POST \
-          --data "$(cat /tmp/data)" \
+          --data "$DATA" \
           ${{ inputs.webhook }}
