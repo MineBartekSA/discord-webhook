@@ -94,10 +94,11 @@ runs:
       if: inputs.embed != ''
       shell: bash
       env:
+        RAW: ${{ inputs.embed }}
         EMBED: ${{ toJSON(fromJSON(inputs.embed)) }}
       run: |
-        echo "::notice::RAW\n${{ inputs.emebd }}"
-        echo "::notice::$EMEBD"
+        echo "::notice::RAW\n$RAW"
+        echo "::notice::$EMBED"
         if [ "$EMBED[0]" == "[" ]
         then
           echo "DATA=$DATA,\"embeds\":$EMBED" >> $GITHUB_ENV
