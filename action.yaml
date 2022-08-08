@@ -96,6 +96,8 @@ runs:
       env:
         EMBED: ${{ toJSON(fromJSON(inputs.embed)) }}
       run: |
+        echo "::notice::RAW\n${{ inputs.emebd }}"
+        echo "::notice::$EMEBD"
         if [ "$EMBED[0]" == "[" ]
         then
           echo "DATA=$DATA,\"embeds\":$EMBED" >> $GITHUB_ENV
