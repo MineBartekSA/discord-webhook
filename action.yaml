@@ -68,7 +68,7 @@ runs:
       run: |
         function split {
           TMP="\"$1\":["
-          for allow in ${$2//,/ }
+          for allow in ${2//,/ }
           do
             TMP="$TMP\"$allow\","
           done
