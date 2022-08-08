@@ -62,4 +62,5 @@ runs:
       shell: pwsh
       run: |
         $env:DATA += '}'
-        Invoke-RestMethod -Uri ${{ inputs.webhook }} -Method 'POST' -Body $env:DATA
+        $head = @{'Content-Type'='application/json'}
+        Invoke-RestMethod -Uri ${{ inputs.webhook }} -Method 'POST' -Body $env:DATA -Headers $head
