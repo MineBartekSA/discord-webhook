@@ -84,5 +84,5 @@ Basic message with mention control:
     allowed_user_mentions: '123, 123'
     allowed_role_mentions: '321, 321'
 ```
-> **Note:** Please use [official Discord docs](https://discord.com/developers/docs/resources/channel#allowed-mentions-object) to see correct usage <br>
-> Use set `allowed_mentions` to `' '` to send an empty allowed mentions object to disallow any mentions
+> **Note:** Please use [official Discord docs](https://discord.com/developers/docs/resources/channel#allowed-mentions-object) to see correct usage. <br>
+> Set `allowed_mentions` to `' '` to send an empty allowed mentions object to disallow any mentions
