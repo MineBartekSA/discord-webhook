@@ -21,6 +21,18 @@ inputs:
     description: 'Set message as TTS'
     required: false
     default: 'false'
+  allowed_mentions:
+    description: 'Comma-separated list of allowed mention types'
+    required: false
+    default: ''
+  allowed_user_mentions:
+    description: 'Comma-separated list of user id, that are allowed to be mentioned'
+    required: false
+    default: ''
+  allowed_role_mentions:
+    description: 'Comma-separated list of role id, that are allowed to be mentioned'
+    required: false
+    default: ''
 
 runs:
   using: 'composite'
@@ -46,6 +58,41 @@ runs:
       if: inputs.tts == true # TODO: check
       shell: bash
       run: echo "DATA=$DATA,\"tts\":true" >> $GITHUB_ENV
+    - name: 'Handle allowed_mentions'
+      if: inputs.allowed_mentions != ''
+      shell: bash
+      env:
+        ALLOWED_MENTIONS: ${{ inputs.allowed_mentions }}
+        ALLOWED_USERS: ${{ inputs.allowed_user_mentions }}
+        ALLOWED_ROLES: ${{ inputs.allowed_role_mentions }}
+      run: |
+        TMP="{\"parse\":["
+        for allow in ${ALLOWED_MENTIONS//,/ }
+        do
+          TMP="$TMP\"$allow\","
+        done
+        TMP="$TMP\b]"
+        if [ "$ALLOWED_USERS" != "" ]
+        then
+          TMP="$TMP,\"users\":["
+          for allow in ${ALLOWED_USERS//,/ }
+          do
+            TMP="$TMP\"$allow\","
+          done
+          TMP="$TMP\b]"
+        fi
+        if [ "$ALLOWED_ROLES" != "" ]
+        then
+          TMP="$TMP,\"roles\":["
+          for allow in ${ALLOWED_ROLES//,/ }
+          do
+            TMP="$TMP\"$allow\","
+          done
+          TMP="$TMP\b]"
+        fi
+        TMP="$TMP}"
+        echo "::notice::$TMP"
+        echo "DATA=$DATA,\"allowed_mentions\":$TMP" >> $GITHUB_ENV
     - name: 'Send webhook message'
       if: runner.os != 'Windows'
       shell: bash

@@ -1,4 +1,4 @@
-name: Discord Webhook test on
+name: Discord Webhook tests
 
 on:
   workflow_dispatch
@@ -13,6 +13,21 @@ jobs:
           webhook: ${{ secrets.WEBHOOK }}
           content: Hello
           username: Testing
+          tts: true
+          allowed_mentions: "users, roles"
+          allowed_user_mentions: "154148273307910144, 154148273307910144"
+          allowed_role_mentions: "391539716966580225, 391539716966580225"
+
+  mac-test:
+    runs-on: macos-latest
+    steps:
+      - name: 'TEst Discord Webhook action'
+        uses: MineBartekSA/discord-webhook@main
+        with:
+          webhook: ${{ secrets.WEBHOOK }}
+          content: Hello from Mac
+          username: Mac me baby
+
   win-test:
     runs-on: windows-latest
     steps:
@@ -22,3 +37,4 @@ jobs:
           webhook: ${{ secrets.WEBHOOK }}
           content: Hello from windows
           username: Windows Pro
+          tts: "true"
