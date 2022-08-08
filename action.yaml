@@ -59,7 +59,7 @@ runs:
         AVATAR_URL: ${{ inputs.avatar_url }}
       run: echo "DATA=$DATA,\"avatar_url\":\"$AVATAR_URL\"" >> $GITHUB_ENV
     - name: 'Handle tts'
-      if: inputs.tts == true # TODO: check
+      if: inputs.tts == 'true' # TODO: check
       shell: bash
       run: echo "DATA=$DATA,\"tts\":true" >> $GITHUB_ENV
     - name: 'Handle allowed_mentions'
