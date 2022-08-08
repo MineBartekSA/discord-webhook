@@ -14,10 +14,10 @@ jobs:
           content: Hello
           username: Testing
           tts: true
-          embed: '{
+          embed: '[{
               "title": "Test",
               "description": "Testing...."
-            }'
+            }]'
 
   # mac-test:
   #   runs-on: macos-latest
