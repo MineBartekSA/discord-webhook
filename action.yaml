@@ -85,14 +85,14 @@ runs:
           fi
           echo "$TMP]"
         }
-        TMP="{$(split "parse", "$ALLOWED_MENTIONS")"
+        TMP="{$(split "parse" "$ALLOWED_MENTIONS")"
         if [ "$ALLOWED_USERS" != "" ]
         then
-          TMP="$TMP,$(split "users", "$ALLOWED_USERS")"
+          TMP="$TMP,$(split "users" "$ALLOWED_USERS")"
         fi
         if [ "$ALLOWED_ROLES" != "" ]
         then
-          TMP="$TMP,$(split "roles", "$ALLOWED_ROLES")"
+          TMP="$TMP,$(split "roles" "$ALLOWED_ROLES")"
         fi
         TMP="$TMP}"
         echo "DATA=$DATA,\"allowed_mentions\":$TMP" >> $GITHUB_ENV
@@ -105,9 +105,9 @@ runs:
         echo "DATA<<EOF" >> $GITHUB_ENV
         if [[ $EMBED == [* ]]
         then
-          echo "$DATA,\"embeds\":$EMBED" >> $GITHUB_ENV
+          echo $(echo "$DATA,\"embeds\":$EMBED") >> $GITHUB_ENV
         else
-          echo "$DATA,\"embeds\":[$EMBED]" >> $GITHUB_ENV
+          echo $(echo "$DATA,\"embeds\":[$EMBED]") >> $GITHUB_ENV
         fi
         echo "EOF" >> $GITHUB_ENV
     - name: 'Send webhook message'
