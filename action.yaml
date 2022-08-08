@@ -92,7 +92,6 @@ runs:
           TMP="$TMP,$(split "roles", "$ALLOWED_ROLES")"
         fi
         TMP="$TMP}"
-        echo "::notice::$TMP"
         echo "DATA=$DATA,\"allowed_mentions\":$TMP" >> $GITHUB_ENV
     - name: 'Handle embed'
       if: inputs.embed != ''
