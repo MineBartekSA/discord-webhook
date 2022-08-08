@@ -120,8 +120,8 @@ runs:
         then
           DATA="{${DATA:2}"
         fi
-        echo "::notice::$DATA"
         TMP=$(printf $CONTENT | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')
+        echo "::notice::$DATA,\"content\":\"$TMP\"}"
         curl -i \
           -H "Accept: application/json" \
           -H "Content-Type: application/json" \
