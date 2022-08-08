@@ -116,13 +116,17 @@ runs:
       env:
         CONTENT: ${{ inputs.content }}
       run: |
-        DATA=${DATA/{,/{}
+        if [[ $DATA == {,* ]]
+        then
+          DATA="{${DATA:2}"
+        fi
+        echo "::notice::$DATA"
         TMP=$(printf $CONTENT | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')
         curl -i \
           -H "Accept: application/json" \
           -H "Content-Type: application/json" \
           -X POST \
-          --data "$DATA\"content\":\"$TMP\"}" \
+          --data "$DATA,\"content\":\"$TMP\"}" \
           ${{ inputs.webhook }}
     - name: 'Send webhook message on Windows'
       if: runner.os == 'Windows'
@@ -131,9 +135,8 @@ runs:
         CONTENT: ${{ inputs.content }}
       run: |
         if ($env:DATA[1] -eq ",") {
-          $env:DATA = "{" + $env:DATA[2..]
+          $env:DATA = "{" + $env:DATA.SubString(2)
         }
-        $env:DATA += '"content":"' + $env:CONTENT.replace("`n", "\n") + '"}'
-        Write-Output "::notice::$($env:DATA)"
+        $env:DATA += ',"content":"' + $env:CONTENT.replace("`n", "\n") + '"}'
         $head = @{'Content-Type'='application/json'}
         Invoke-RestMethod -Uri ${{ inputs.webhook }} -Method 'POST' -Body $env:DATA -Headers $head
