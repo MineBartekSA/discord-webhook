@@ -76,8 +76,11 @@ runs:
           do
             TMP="$TMP\"$allow\","
           done
-          TMP="${TMP::-1}]"
-          echo $TMP
+          if [ "${TMP: -1}" != "[" ]
+          then
+            TMP="${TMP::-1}"
+          fi
+          echo "$TMP]"
         }
         TMP="{$(split "parse", "$ALLOWED_MENTIONS")"
         if [ "$ALLOWED_USERS" != "" ]
