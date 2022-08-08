@@ -50,23 +50,35 @@ runs:
       shell: bash
       env:
         CONTENT: ${{ inputs.content }}
-      run: echo "DATA={\"content\":\"$CONTENT\"" >> $GITHUB_ENV
+      run: |
+        echo "DATA<<EOF" >> $GITHUB_ENV
+        echo "{\"content\":\"$CONTENT\"" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
     - name: 'Handle username'
       if: inputs.username != ''
       shell: bash
       env:
         USERNAME: ${{ inputs.username }}
-      run: echo "DATA=$DATA,\"username\":\"$USERNAME\"" >> $GITHUB_ENV
+      run: |
+        echo "DATA<<EOF" >> $GITHUB_ENV
+        echo "$DATA,\"username\":\"$USERNAME\"" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
     - name: 'Handle avatar_url'
       if: inputs.avatar_url != ''
       shell: bash
       env:
         AVATAR_URL: ${{ inputs.avatar_url }}
-      run: echo "DATA=$DATA,\"avatar_url\":\"$AVATAR_URL\"" >> $GITHUB_ENV
+      run: |
+        echo "DATA<<EOF" >> $GITHUB_ENV
+        echo "$DATA,\"avatar_url\":\"$AVATAR_URL\"" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
     - name: 'Handle tts'
       if: inputs.tts == 'true'
       shell: bash
-      run: echo "DATA=$DATA,\"tts\":true" >> $GITHUB_ENV
+      run: |
+        echo "DATA<<EOF" >> $GITHUB_ENV
+        echo "$DATA,\"tts\":true" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
     - name: 'Handle allowed_mentions'
       if: inputs.allowed_mentions != ''
       shell: bash
@@ -97,7 +109,9 @@ runs:
           TMP="$TMP,$(split "roles", "$ALLOWED_ROLES")"
         fi
         TMP="$TMP}"
-        echo "DATA=$DATA,\"allowed_mentions\":$TMP" >> $GITHUB_ENV
+        echo "DATA<<EOF" >> $GITHUB_ENV
+        echo "$DATA,\"allowed_mentions\":$TMP" >> $GITHUB_ENV
+        echo "EOF" >> $GITHUB_ENV
     - name: 'Handle embed'
       if: inputs.embed != ''
       shell: bash
