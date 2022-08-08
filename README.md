@@ -8,7 +8,7 @@ Unlike other actions, this action is based on composite actions, meaning it does
 
 ```yaml
 - name: 'Send basic message to Discord'
-  uses: MineBartekSA/discord-webhook@v1.1
+  uses: MineBartekSA/discord-webhook@v1.3
   with:
     webhook: ${{ secrets.WEBHOOK_URL }}
     content: 'Hello Discord'
@@ -33,7 +33,7 @@ This actions accepts following inputs:
 Basic message with TTS:
 ```yaml
 - name: 'Send TTS Discord message'
-  uses: MineBartekSA/discord-webhook@v1
+  uses: MineBartekSA/discord-webhook@v1.3
   with:
     webhook: ${{ secrets.WEBHOOK_URL }}
     content: 'Hello Discord, this message is TTS'
@@ -43,7 +43,7 @@ Basic message with TTS:
 Embed message:
 ```yaml
 - name: 'Send embedded Discord message'
-  uses: MineBartekSA/discord-webhook@v1
+  uses: MineBartekSA/discord-webhook@v1.3
   with:
     webhook: ${{ secrets.WEBHOOK_URL }}
     embed: '{
@@ -57,7 +57,7 @@ Embed message:
 Multiple embed message:
 ```yaml
 - name: 'Send a Discord message with multiple embeds'
-  uses: MineBartekSA/discord-webhook@v1
+  uses: MineBartekSA/discord-webhook@v1.3
   with:
     webhook: ${{ secrets.WEBHOOK_URL }}
     embed: '[
@@ -77,7 +77,7 @@ Multiple embed message:
 Basic message with mention control:
 ```yaml
 - name: 'Send Discord message with allowed mentions data'
-  uses: MineBartekSA/discord-webhook@v1
+  uses: MineBartekSA/discord-webhook@v1.3
   with:
     webhook: ${{ secrets.WEBHOOK_URL }}
     content: 'Hello Discord @everyone'
