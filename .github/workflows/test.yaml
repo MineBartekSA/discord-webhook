@@ -11,7 +11,7 @@ jobs:
         uses: MineBartekSA/discord-webhook@main
         with:
           webhook: ${{ secrets.WEBHOOK }}
-          content: Hello
+          content: "Hello\nTest multiline content"
           username: Testing
           tts: true
           allowed_mentions: ' '
