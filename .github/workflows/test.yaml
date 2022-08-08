@@ -17,7 +17,7 @@ jobs:
           embed: '[{
               "title": "Test",
               "description": "Testing...."
-            }]'
+            }'
 
   # mac-test:
   #   runs-on: macos-latest
