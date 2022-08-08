@@ -47,7 +47,7 @@ runs:
       shell: bash
       run: echo "DATA=$DATA,\"tts\":true" >> $GITHUB_ENV
     - name: 'Send webhook message'
-      if: $runner.os != 'Windows'
+      if: runner.os != 'Windows'
       shell: bash
       run: |
         DATA="$DATA}"
