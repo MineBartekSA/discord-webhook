@@ -14,9 +14,10 @@ jobs:
           content: Hello
           username: Testing
           tts: true
-          embed: '[{
+          embed: '{
               "title": "Test",
-              "description": "Testing...."
+              "description": "Testing....",
+              "color": 65535
             }'
 
   # mac-test:

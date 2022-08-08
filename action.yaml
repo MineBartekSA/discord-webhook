@@ -108,6 +108,7 @@ runs:
       if: runner.os != 'Windows'
       shell: bash
       run: |
+        echo "::notice::${{ inputs.tts }}"
         DATA="$DATA}"
         echo "::notice::$DATA"
         curl -i \
