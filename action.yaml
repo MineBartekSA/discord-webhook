@@ -138,11 +138,12 @@ runs:
         then
           DATA="$DATA,"
         fi
+        TMP=$(echo $CONTENT | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')
         curl -i \
           -H "Accept: application/json" \
           -H "Content-Type: application/json" \
           -X POST \
-          --data "$DATA\"content\":\"$(echo $CONTENT | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')\"}" \
+          --data "$DATA\"content\":\"$TMP\"}" \
           ${{ inputs.webhook }}
     - name: 'Send webhook message on Windows'
       if: runner.os == 'Windows'
