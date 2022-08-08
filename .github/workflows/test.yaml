@@ -13,3 +13,12 @@ jobs:
           webhook: ${{ secrets.WEBHOOK }}
           content: Hello
           username: Testing
+  win-test:
+    runs-on: windows-latest
+    steps:
+      - name: 'Test Discord Webhook action'
+        uses: MineBartekSA/discord-webhook@main
+        with:
+          webhook: ${{ secrets.WEBHOOK }}
+          content: Hello from windows
+          username: Windows Pro
