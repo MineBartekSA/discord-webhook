@@ -50,7 +50,7 @@ runs:
       shell: bash
       env:
         CONTENT: ${{ inputs.content }}
-      run: echo "{\"content\":\"$CONTENT\"" >> $GITHUB_ENV
+      run: echo "{\"content\":\"$(echo $CONTENT | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')\"" >> $GITHUB_ENV
     - name: 'Handle username'
       if: inputs.username != ''
       shell: bash
