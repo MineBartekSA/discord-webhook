@@ -14,29 +14,42 @@ jobs:
           content: Hello
           username: Testing
           tts: true
+          allowed_mentions: ' '
           embed: '{
               "title": "Test",
               "description": "Testing....",
               "color": 65535
             }'
 
-  # mac-test:
-  #   runs-on: macos-latest
-  #   steps:
-  #     - name: 'Test Discord Webhook action'
-  #       uses: MineBartekSA/discord-webhook@main
-  #       with:
-  #         webhook: ${{ secrets.WEBHOOK }}
-  #         content: Hello from Mac
-  #         username: Mac me baby
+  mac-test:
+    runs-on: macos-latest
+    steps:
+      - name: 'Test Discord Webhook action'
+        uses: MineBartekSA/discord-webhook@main
+        with:
+          webhook: ${{ secrets.WEBHOOK }}
+          content: Hello from Mac
+          username: Mac me baby
 
-  # win-test:
-  #   runs-on: windows-latest
-  #   steps:
-  #     - name: 'Test Discord Webhook action'
-  #       uses: MineBartekSA/discord-webhook@main
-  #       with:
-  #         webhook: ${{ secrets.WEBHOOK }}
-  #         content: Hello from windows
-  #         username: Windows Pro
-  #         tts: "true"
+  win-test:
+    runs-on: windows-latest
+    steps:
+      - name: 'Test Discord Webhook action'
+        uses: MineBartekSA/discord-webhook@main
+        with:
+          webhook: ${{ secrets.WEBHOOK }}
+          content: Hello from windows
+          username: Windows Pro
+          tts: "true"
+          embed: '[
+              {
+                "title": "First embed",
+                "description": "One",
+                "color": 65535
+              },
+              {
+                "title": "Second embed",
+                "description": "Two",
+                "color": 16711680
+              }
+            ]'
