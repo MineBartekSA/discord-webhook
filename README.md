@@ -1,4 +1,4 @@
-# Discord Webhook action
+# Composite Discord Webhooks
 
 Github Actions for sending messages through Discord's Webhooks
 
