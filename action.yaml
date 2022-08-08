@@ -94,16 +94,13 @@ runs:
       if: inputs.embed != ''
       shell: bash
       env:
-        RAW: ${{ inputs.embed }}
         EMBED: ${{ toJSON(fromJSON(inputs.embed)) }}
       run: |
-        echo "::notice::RAW\n$RAW"
-        echo "::notice::$EMBED"
         if [ "$EMBED[0]" == "[" ]
         then
           echo "DATA=$DATA,\"embeds\":$EMBED" >> $GITHUB_ENV
         else
-          echo "DATA=$DATA,\"embeds\":[$EMEBD]" >> $GITHUB_ENV
+          echo "DATA=$DATA,\"embeds\":[$EMBED]" >> $GITHUB_ENV
         fi
     - name: 'Send webhook message'
       if: runner.os != 'Windows'
