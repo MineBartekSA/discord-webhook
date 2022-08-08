@@ -71,7 +71,7 @@ runs:
         do
           TMP="$TMP\"$allow\","
         done
-        TMP="$TMP\b]"
+        TMP=${TMP::-1}
         if [ "$ALLOWED_USERS" != "" ]
         then
           TMP="$TMP,\"users\":["
@@ -79,7 +79,7 @@ runs:
           do
             TMP="$TMP\"$allow\","
           done
-          TMP="$TMP\b]"
+          TMP=${TMP::-1}
         fi
         if [ "$ALLOWED_ROLES" != "" ]
         then
@@ -88,7 +88,7 @@ runs:
           do
             TMP="$TMP\"$allow\","
           done
-          TMP="$TMP\b]"
+          TMP=${TMP::-1}
         fi
         TMP="$TMP}"
         echo "::notice::$TMP"

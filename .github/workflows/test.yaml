@@ -21,7 +21,7 @@ jobs:
   mac-test:
     runs-on: macos-latest
     steps:
-      - name: 'TEst Discord Webhook action'
+      - name: 'Test Discord Webhook action'
         uses: MineBartekSA/discord-webhook@main
         with:
           webhook: ${{ secrets.WEBHOOK }}
