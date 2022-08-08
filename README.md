@@ -8,11 +8,12 @@ Unlike other actions, this action is based on composite actions, meaning it does
 
 ```yaml
 - name: 'Send basic message to Discord'
-  uses: MineBartekSA/discord-webhook@v1
+  uses: MineBartekSA/discord-webhook@v1.1
   with:
     webhook: ${{ secrets.WEBHOOK_URL }}
     content: 'Hello Discord'
 ```
+> **Note:** There is no runner restriction. Any will do.
 
 ### Inputs
 
