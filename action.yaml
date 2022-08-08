@@ -66,29 +66,23 @@ runs:
         ALLOWED_USERS: ${{ inputs.allowed_user_mentions }}
         ALLOWED_ROLES: ${{ inputs.allowed_role_mentions }}
       run: |
-        TMP="{\"parse\":["
-        for allow in ${ALLOWED_MENTIONS//,/ }
-        do
-          TMP="$TMP\"$allow\","
-        done
-        TMP=${TMP::-1}
-        if [ "$ALLOWED_USERS" != "" ]
-        then
-          TMP="$TMP,\"users\":["
-          for allow in ${ALLOWED_USERS//,/ }
+        function split {
+          TMP="\"$1\":["
+          for allow in ${$2//,/ }
           do
             TMP="$TMP\"$allow\","
           done
-          TMP=${TMP::-1}
+          TMP="${TMP::-1}]"
+          return $TMP
+        }
+        TMP="{$(split "parse", $ALLOWED_MENTIONS)"
+        if [ "$ALLOWED_USERS" != "" ]
+        then
+          TMP="$TMP,$(split "users", $ALLOWED_USERS)"
         fi
         if [ "$ALLOWED_ROLES" != "" ]
         then
-          TMP="$TMP,\"roles\":["
-          for allow in ${ALLOWED_ROLES//,/ }
-          do
-            TMP="$TMP\"$allow\","
-          done
-          TMP=${TMP::-1}
+          TMP="$TMP,$(split "roles", $ALLOWED_ROLES)"
         fi
         TMP="$TMP}"
         echo "::notice::$TMP"
