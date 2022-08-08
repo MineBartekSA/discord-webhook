@@ -38,7 +38,7 @@ jobs:
         uses: MineBartekSA/discord-webhook@main
         with:
           webhook: ${{ secrets.WEBHOOK }}
-          content: Hello from windows
+          content: "Hello from windows\nMultiline"
           username: Windows Pro
           tts: "true"
           embed: '[
