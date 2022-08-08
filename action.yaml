@@ -96,12 +96,15 @@ runs:
       env:
         EMBED: ${{ toJSON(fromJSON(inputs.embed)) }}
       run: |
+        echo "DATA<<EOF" >> $GITHUB_ENV
+        echo "$DATA" >> $GITHUB_ENV
         if [ "$EMBED[0]" == "[" ]
         then
-          echo "DATA=$DATA,\"embeds\":$EMBED" >> $GITHUB_ENV
+          echo ",\"embeds\":$EMBED" >> $GITHUB_ENV
         else
-          echo "DATA=$DATA,\"embeds\":[$EMBED]" >> $GITHUB_ENV
+          echo ",\"embeds\":[$EMBED]" >> $GITHUB_ENV
         fi
+        echo "EOF" >> $GITHUB_ENV
     - name: 'Send webhook message'
       if: runner.os != 'Windows'
       shell: bash
