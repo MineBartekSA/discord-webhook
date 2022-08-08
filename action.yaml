@@ -131,6 +131,7 @@ runs:
       shell: bash
       run: |
         DATA="$DATA}"
+        echo "::notice::$DATA"
         curl -i \
           -H "Accept: application/json" \
           -H "Content-Type: application/json" \
