@@ -124,6 +124,7 @@ runs:
           -H "Accept: application/json" \
           -H "Content-Type: application/json" \
           -X POST \
+          -v \
           --data "$DATA\"content\":\"$(echo $CONTENT | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')\"}" \
           ${{ inputs.webhook }}
     - name: 'Send webhook message on Windows'
@@ -132,6 +133,10 @@ runs:
       env:
         CONTENT: ${{ inputs.content }}
       run: |
-        $env:DATA += $env:CONTENT.replace("`n", "\n") + '}'
+        if ($env:DATA != "{") {
+          $env:DATA += ","
+        }
+        $env:DATA += "\"content\":\"" + $env:CONTENT.replace("`n", "\n") + '\"}'
+        Write-Output "::notice::$($env:DATA)"
         $head = @{'Content-Type'='application/json'}
         Invoke-RestMethod -Uri ${{ inputs.webhook }} -Method 'POST' -Body $env:DATA -Headers $head
