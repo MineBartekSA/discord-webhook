@@ -1,0 +1,58 @@
+name: 'Discord Webhook Action'
+description: "Github Actions for sending messages through Discord's Webhooks"
+
+inputs:
+  webhook:
+    description: 'Webhook URL'
+    required: true
+  content:
+    description: 'Message content'
+    required: false
+    default: ''
+  username:
+    description: 'Message author username'
+    required: false
+    default: ''
+  avatar_url:
+    description: 'Message author avatar'
+    required: false
+    default: ''
+  tts:
+    description: 'Set message as TTS'
+    required: false
+    default: 'false'
+
+runs:
+  using: 'composite'
+  steps:
+    - name: 'Handle content'
+      shell: bash
+      env:
+        CONTENT: ${{ inputs.content }}
+      run: echo -n "{\"content\":\"$CONTENT\"" >> /tmp/data
+    - name: 'Handle username'
+      if: ${{ inputs.username != '' }}
+      shell: bash
+      env:
+        USERNAME: ${{ inputs.username }}
+      run: echo -n ",\"username\":\"$USERNAME\"" >> /tmp/data
+    - name: 'Handle avatar_url'
+      if: ${{ inputs.avatar_url != '' }}
+      shell: bash
+      env:
+        AVATAR_URL: ${{ inputs.avatar_url }}
+      run: echo -n ",\"avatar_url\":\"$AVATAR_URL\"" >> /tmp/data
+    - name: 'Handle tts'
+      if: ${{ inputs.tts == true }} # TODO: check
+      shell: bash
+      run: echo -n ",\"tts\":true" >> /tmp/data
+    - name: 'Send webhook message'
+      shell: bash
+      run: |
+        echo -n "}" >> /tmp/data
+        curl -i \
+          -H "Accept: application/json" \
+          -H "Content-Type: application/json" \
+          -X POST \
+          --data "$(cat /tmp/data)" \
+          ${{ inputs.webhook }}
