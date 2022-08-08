@@ -120,13 +120,13 @@ runs:
         then
           DATA="{${DATA:2}"
         fi
-        TMP=$(printf $CONTENT | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')
-        echo "::notice::$DATA,\"content\":\"$TMP\"}"
+        echo "$DATA,\"content\":\"$CONTENT\"}" | \
+        sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' | \
         curl -i \
           -H "Accept: application/json" \
           -H "Content-Type: application/json" \
           -X POST \
-          --data "$DATA,\"content\":\"$TMP\"}" \
+          --data-binary @- \
           ${{ inputs.webhook }}
     - name: 'Send webhook message on Windows'
       if: runner.os == 'Windows'
