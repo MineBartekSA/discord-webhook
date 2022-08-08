@@ -54,17 +54,27 @@ runs:
       shell: bash
       env:
         USERNAME: ${{ inputs.username }}
-      run: echo "DATA=$DATA,\"username\":\"$USERNAME\"" >> $GITHUB_ENV
+      run: echo "DATA=$DATA\"username\":\"$USERNAME\"" >> $GITHUB_ENV
     - name: 'Handle avatar_url'
       if: inputs.avatar_url != ''
       shell: bash
       env:
         AVATAR_URL: ${{ inputs.avatar_url }}
-      run: echo "DATA=$DATA,\"avatar_url\":\"$AVATAR_URL\"" >> $GITHUB_ENV
+      run: |
+        if [ "$DATA" != "{" ]
+        then
+          DATA="$DATA,"
+        fi
+        echo "DATA=$DATA\"avatar_url\":\"$AVATAR_URL\"" >> $GITHUB_ENV
     - name: 'Handle tts'
       if: inputs.tts == 'true'
       shell: bash
-      run: echo "DATA=$DATA,\"tts\":true" >> $GITHUB_ENV
+      run: |
+        if [ "$DATA" != "{" ]
+        then
+          DATA="$DATA,"
+        fi
+        echo "DATA=$DATA\"tts\":true" >> $GITHUB_ENV
     - name: 'Handle allowed_mentions'
       if: inputs.allowed_mentions != ''
       shell: bash
@@ -95,7 +105,11 @@ runs:
           TMP="$TMP,$(split "roles", "$ALLOWED_ROLES")"
         fi
         TMP="$TMP}"
-        echo "DATA=$DATA,\"allowed_mentions\":$TMP" >> $GITHUB_ENV
+        if [ "$DATA" != "{" ]
+        then
+          DATA="$DATA,"
+        fi
+        echo "DATA=$DATA\"allowed_mentions\":$TMP" >> $GITHUB_ENV
     - name: 'Handle embed'
       if: inputs.embed != ''
       shell: bash
@@ -103,11 +117,15 @@ runs:
         EMBED: ${{ toJSON(fromJSON(inputs.embed)) }}
       run: |
         echo "DATA<<EOF" >> $GITHUB_ENV
+        if [ "$DATA" != "{" ]
+        then
+          DATA="$DATA,"
+        fi
         if [[ $EMBED == [* ]]
         then
-          echo "$DATA,\"embeds\":$EMBED" >> $GITHUB_ENV
+          echo "$DATA\"embeds\":$EMBED" >> $GITHUB_ENV
         else
-          echo "$DATA,\"embeds\":[$EMBED]" >> $GITHUB_ENV
+          echo "$DATA\"embeds\":[$EMBED]" >> $GITHUB_ENV
         fi
         echo "EOF" >> $GITHUB_ENV
     - name: 'Send webhook message'
@@ -137,7 +155,7 @@ runs:
         if ($env:DATA -ne "{") {
           $env:DATA += ","
         }
-        $env:DATA += "\"content\":\"" + $env:CONTENT.replace("`n", "\n") + '\"}'
+        $env:DATA += '"content":"' + $env:CONTENT.replace("`n", "\n") + '"}'
         Write-Output "::notice::$($env:DATA)"
         $head = @{'Content-Type'='application/json'}
         Invoke-RestMethod -Uri ${{ inputs.webhook }} -Method 'POST' -Body $env:DATA -Headers $head
