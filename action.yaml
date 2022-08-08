@@ -33,6 +33,10 @@ inputs:
     description: 'Comma-separated list of role id, that are allowed to be mentioned'
     required: false
     default: ''
+  embed:
+    description: 'JSON string of the embed object, or embed array'
+    required: false
+    default: ''
 
 runs:
   using: 'composite'
@@ -85,13 +89,25 @@ runs:
           TMP="$TMP,$(split "roles", "$ALLOWED_ROLES")"
         fi
         TMP="$TMP}"
-        echo "::notice::$TMP"
         echo "DATA=$DATA,\"allowed_mentions\":$TMP" >> $GITHUB_ENV
+    - name: 'Handle embed'
+      if: inputs.embed != ''
+      shell: bash
+      env:
+        EMBED: ${{ toJSON(fromJSON(inputs.embed)) }}
+      run: |
+        if [ "$EMBED[0]" == "[" ]
+        then
+          echo "DATA=$DATA,\"embeds\":$EMBED" >> $GITHUB_ENV
+        else
+          echo "DATA=$DATA,\"embeds\":[$EMEBD]" >> $GITHUB_ENV
+        fi
     - name: 'Send webhook message'
       if: runner.os != 'Windows'
       shell: bash
       run: |
         DATA="$DATA}"
+        echo "::notice::$DATA"
         curl -i \
           -H "Accept: application/json" \
           -H "Content-Type: application/json" \
