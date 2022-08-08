@@ -1,0 +1,14 @@
+name: Discord Webhook test on
+
+on:
+  workflow_dispatch
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    steps:
+      - name: 'Test Discord Webhook action'
+        uses: MineBartekSA/discord-webhook@main
+        with:
+          webhook: ${{ secrets.WEBHOOK }}
+          content: Hello
