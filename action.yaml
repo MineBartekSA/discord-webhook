@@ -102,7 +102,7 @@ runs:
       env:
         EMBED: ${{ inputs.embed }}
       run: |
-        EMBED=$(./flatten.sh "$EMBED")
+        EMBED=$($GITHUB_ACTION_PATH/flatten.sh "$EMBED")
         [ "${EMBED:0:1}" != "[" ] && EMBED="[$EMBED]"
         echo "DATA=$DATA\"embeds\":$EMBED," >> $GITHUB_ENV
         echo "::debug::${{ fromJSON(env.EMBED) }}"
