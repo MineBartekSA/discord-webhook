@@ -48,23 +48,23 @@ runs:
   steps:
     - name: 'Prepare'
       shell: bash
-      run: echo "DATA={" >> $GITHUB_ENV
+      run: DATA="{" && echo "DATA=$DATA" >> $GITHUB_ENV
     - name: 'Handle username'
       if: inputs.username != ''
       shell: bash
       env:
         USERNAME: ${{ inputs.username }}
-      run: echo "DATA=$DATA\"username\":\"$(echo $USERNAME)\"," >> $GITHUB_ENV
+      run: DATA="$DATA\"username\":\"$USERNAME\"," && echo "DATA=$DATA" >> $GITHUB_ENV
     - name: 'Handle avatar_url'
       if: inputs.avatar_url != ''
       shell: bash
       env:
         AVATAR_URL: ${{ inputs.avatar_url }}
-      run: echo "DATA=$DATA\"avatar_url\":\"$(echo $AVATAR_URL)\"," >> $GITHUB_ENV
+      run: DATA="$DATA\"avatar_url\":\"$(echo $AVATAR_URL)\"," && echo "DATA=$DATA" >> $GITHUB_ENV
     - name: 'Handle tts'
       if: inputs.tts == 'true'
       shell: bash
-      run: echo "DATA=$DATA\"tts\":true," >> $GITHUB_ENV
+      run: DATA="$DATA\"tts\":true," && echo "DATA=$DATA" >> $GITHUB_ENV
     - name: 'Handle allowed_mentions'
       if: inputs.allowed_mentions != ''
       shell: bash
@@ -95,7 +95,7 @@ runs:
           TMP="$TMP,$(split "roles" "$ALLOWED_ROLES")"
         fi
         TMP="$TMP}"
-        echo "DATA=$DATA\"allowed_mentions\":$TMP," >> $GITHUB_ENV
+        DATA="$DATA\"allowed_mentions\":$TMP," && echo "DATA=$DATA" >> $GITHUB_ENV
     - name: 'Handle embed'
       if: inputs.embed != ''
       shell: bash
@@ -105,7 +105,7 @@ runs:
         EMBED=$(ruby $GITHUB_ACTION_PATH/utils.ru handleJson "$EMBED")
         [ "${EMBED:0:1}" != "[" ] && EMBED="[$EMBED]"
         echo "::notice::$EMBED"
-        echo "DATA=$DATA\"embeds\":$EMBED," >> $GITHUB_ENV
+        DATA="$DATA\"embeds\":$EMBED," && echo "DATA=$DATA" >> $GITHUB_ENV
     - name: 'Send webhook message'
       if: runner.os != 'Windows'
       shell: bash
