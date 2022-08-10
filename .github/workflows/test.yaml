@@ -5,7 +5,7 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-18.04
+    runs-on: ubuntu-latest
     steps:
       - name: 'Test the most basic usage'
         uses: MineBartekSA/discord-webhook@main
@@ -17,12 +17,11 @@ jobs:
         with:
           webhook: ${{ secrets.WEBHOOK }}
           content: "Hello\nTest multiline content"
-          username: Testing
-          tts: true
-          allowed_mentions: ' '
+          username: Linux
           embed: '{
               "title": "Test",
-              "description": "Testing....",
+              "description": "Testing....
+              Yeah, all to plan",
               "color": 65535
             }'
 
@@ -33,8 +32,14 @@ jobs:
         uses: MineBartekSA/discord-webhook@main
         with:
           webhook: ${{ secrets.WEBHOOK }}
-          content: Hello from Mac
-          username: Mac me baby
+          content: "Hello from Mac\nIndeed"
+          username: Mac
+          embed: '{
+              "title": "Test on mac",
+              "description": "Testing....
+              You know what? This works",
+              "color": 65535
+            }'
 
   win-test:
     runs-on: windows-latest
@@ -44,17 +49,21 @@ jobs:
         with:
           webhook: ${{ secrets.WEBHOOK }}
           content: "Hello from windows\nMultiline"
-          username: Windows Pro
+          username: Windows
           tts: "true"
           embed: '[
               {
-                "title": "First embed",
-                "description": "One",
+                "title": "First
+                embed",
+                "description": "One
+                line",
                 "color": 65535
               },
               {
-                "title": "Second embed",
-                "description": "Two",
+                "title": "Second
+                embed",
+                "description": "Two
+                line",
                 "color": 16711680
               }
             ]'
