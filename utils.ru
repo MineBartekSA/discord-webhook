@@ -4,7 +4,7 @@ require 'yaml'
 require 'json'
 
 def prettyJson(args)
-    print "```\n" + JSON.pretty_generate(JSON.parse(args[0])) "```\n"
+    print "```\n" + JSON.pretty_generate(JSON.parse(args[0])) + "```\n"
 end
 
 def literalNewline(args)
