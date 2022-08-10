@@ -112,7 +112,7 @@ runs:
       env:
         CONTENT: ${{ inputs.content }}
       run: |
-        DATA="$DATA\"content\":\"$(echo "$CONTENT" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')\"}"
+        DATA="$DATA\"content\":\"$(ruby $GITHUB_ACTION_PATH/utils.ru literalNewline "$CONTENT")\"}"
         echo "::notice::$DATA"
         curl -i \
           -H "Accept: application/json" \

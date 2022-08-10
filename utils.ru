@@ -2,6 +2,10 @@
 
 require 'json'
 
+def literalNewline(args)
+    print args[0].gsub(/\r{0,1}\n/, "\\n")
+end
+
 def handleJson(args)
     json = args[0].dup
     i = -1
