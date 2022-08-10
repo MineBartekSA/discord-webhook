@@ -108,7 +108,7 @@ runs:
       run: |
         DATA="$DATA\"content\":\"$(ruby $GITHUB_ACTION_PATH/utils.ru literalNewline "$CONTENT")\"}"
         TMP=$(mktemp)
-        curl -i \
+        curl -w "%{stderr}HTTP/%{http_version} %{http_code}\n" \
           -H "Accept: application/json" \
           -H "Content-Type: application/json" \
           -X POST \
@@ -117,10 +117,10 @@ runs:
         if [ -s $TMP ]
         then
           echo "::error title=Faild to send message::Discord did not respond with expected status."
-          echo "Non-204 status" >> $GITHUB_STEP_SUMMARY
-          echo "Temporary file: $TMP" >> $GITHUB_STEP_SUMMARY
+          echo "## Discord Error\n```\n" >> $GITHUB_STEP_SUMMARY
           cat $TMP >> $GITHUB_STEP_SUMMARY
-          exit 1
+          echo "```" >> $GITHUB_STEP_SUMMARY
+          exit 22
         fi
     - name: 'Send webhook message on Windows'
       if: runner.os == 'Windows'
