@@ -7,11 +7,6 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      # - name: 'Test the most basic usage'
-      #   uses: MineBartekSA/discord-webhook@main
-      #   with:
-      #     webhook: ${{ secrets.WEBHOOK }}
-      #     content: "Hello\nTest multiline content\n\\\"Testing\\\" hehe"
       - name: 'Test basic embed'
         uses: MineBartekSA/discord-webhook@main
         with:
@@ -21,6 +16,7 @@ jobs:
           embed: '{
               "title": "Test",
               "description": "Testing....
+
               Yeah, all to plan",
               "color": 65535
             }'
@@ -37,6 +33,7 @@ jobs:
           embed: '{
               "title": "Test on mac",
               "description": "Testing....
+
               You know what? This works",
               "color": 65535
             }'
@@ -54,15 +51,19 @@ jobs:
           embed: '[
               {
                 "title": "First
+
                 embed",
                 "description": "One
+
                 line",
                 "color": 65535
               },
               {
                 "title": "Second
+
                 embed",
                 "description": "Two
+
                 line",
                 "color": 16711680
               }
