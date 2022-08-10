@@ -54,17 +54,17 @@ runs:
       shell: bash
       env:
         USERNAME: ${{ inputs.username }}
-      run: echo "DATA=$DATA\"username\":\"$(echo $USERNAME)\"" >> $GITHUB_ENV
+      run: echo "DATA=$DATA\"username\":\"$(echo $USERNAME)\"," >> $GITHUB_ENV
     - name: 'Handle avatar_url'
       if: inputs.avatar_url != ''
       shell: bash
       env:
         AVATAR_URL: ${{ inputs.avatar_url }}
-      run: echo "DATA=$DATA,\"avatar_url\":\"$(echo $AVATAR_URL)\"" >> $GITHUB_ENV
+      run: echo "DATA=$DATA\"avatar_url\":\"$(echo $AVATAR_URL)\"," >> $GITHUB_ENV
     - name: 'Handle tts'
       if: inputs.tts == 'true'
       shell: bash
-      run: echo "DATA=$DATA,\"tts\":true" >> $GITHUB_ENV
+      run: echo "DATA=$DATA\"tts\":true," >> $GITHUB_ENV
     - name: 'Handle allowed_mentions'
       if: inputs.allowed_mentions != ''
       shell: bash
@@ -95,36 +95,30 @@ runs:
           TMP="$TMP,$(split "roles" "$ALLOWED_ROLES")"
         fi
         TMP="$TMP}"
-        echo "DATA=$DATA,\"allowed_mentions\":$TMP" >> $GITHUB_ENV
+        echo "DATA=$DATA\"allowed_mentions\":$TMP," >> $GITHUB_ENV
     - name: 'Handle embed'
       if: inputs.embed != ''
       shell: bash
       env:
-        EMBED: ${{ toJSON(fromJSON(inputs.embed)) }}
+        EMBED: ${{ inputs.embed }}
       run: |
-        echo "DATA<<EOF" >> $GITHUB_ENV
-        if [[ $EMBED == [* ]]
-        then
-          echo $(echo "$DATA,\"embeds\":$EMBED") >> $GITHUB_ENV
-        else
-          echo $(echo "$DATA,\"embeds\":[$EMBED]") >> $GITHUB_ENV
-        fi
-        echo "EOF" >> $GITHUB_ENV
+        EMBED=$(./flatten.sh "$EMBED")
+        [ "${EMBED:0:1}" != "[" ] && EMBED="[$EMBED]"
+        echo "DATA=$DATA\"embeds\":$EMBED," >> $GITHUB_ENV
+        echo "::debug::${{ fromJSON(env.EMBED) }}"
     - name: 'Send webhook message'
       if: runner.os != 'Windows'
       shell: bash
       env:
         CONTENT: ${{ inputs.content }}
       run: |
-        [[ $DATA == {,* ]] && DATA="{${DATA:2}"
-        [ "$DATA" != "{" ] && DATA="$DATA,"
-        echo "$DATA\"content\":\"$CONTENT\"}" | \
-        sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g' | \
+        DATA="$DATA\"content\":\"$(echo "$CONTENT" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')\"}"
+        echo "::debug::$DATA"
         curl -i \
           -H "Accept: application/json" \
           -H "Content-Type: application/json" \
           -X POST \
-          --data-binary @- \
+          --data "$DATA" \
           ${{ inputs.webhook }}
     - name: 'Send webhook message on Windows'
       if: runner.os == 'Windows'
@@ -132,12 +126,6 @@ runs:
       env:
         CONTENT: ${{ inputs.content }}
       run: |
-        if ($env:DATA[1] -eq ",") {
-          $env:DATA = "{" + $env:DATA.SubString(2)
-        }
-        if ($env:DATA -ne "{") {
-          $env:DATA += ","
-        }
         $env:DATA += '"content":"' + $env:CONTENT.replace("`n", "\n") + '"}'
         $head = @{'Content-Type'='application/json'}
         Invoke-RestMethod -Uri ${{ inputs.webhook }} -Method 'POST' -Body $env:DATA -Headers $head
