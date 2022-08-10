@@ -117,7 +117,7 @@ runs:
         if [ -s $TMP ]
         then
           echo "::error title=Faild to send message::Discord did not respond with expected status."
-          echo "## Discord Error\n```\n" >> $GITHUB_STEP_SUMMARY
+          echo "## Discord Error```" >> $GITHUB_STEP_SUMMARY
           cat $TMP >> $GITHUB_STEP_SUMMARY
           echo "```" >> $GITHUB_STEP_SUMMARY
           exit 22
