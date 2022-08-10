@@ -102,10 +102,10 @@ runs:
       env:
         EMBED: ${{ inputs.embed }}
       run: |
-        EMBED=$($GITHUB_ACTION_PATH/flatten.sh "$EMBED")
+        EMBED=$(ruby $GITHUB_ACTION_PATH/utils.ru handleJson "$EMBED")
         [ "${EMBED:0:1}" != "[" ] && EMBED="[$EMBED]"
+        echo "::notice::$EMBED"
         echo "DATA=$DATA\"embeds\":$EMBED," >> $GITHUB_ENV
-        echo "::debug::${{ fromJSON(env.EMBED) }}"
     - name: 'Send webhook message'
       if: runner.os != 'Windows'
       shell: bash
@@ -113,7 +113,7 @@ runs:
         CONTENT: ${{ inputs.content }}
       run: |
         DATA="$DATA\"content\":\"$(echo "$CONTENT" | sed -E ':a;N;$!ba;s/\r{0,1}\n/\\n/g')\"}"
-        echo "::debug::$DATA"
+        echo "::notice::$DATA"
         curl -i \
           -H "Accept: application/json" \
           -H "Content-Type: application/json" \
