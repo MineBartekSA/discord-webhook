@@ -3,6 +3,10 @@
 require 'yaml'
 require 'json'
 
+def prettyJson(args)
+    print JSON.pretty_generate(JSON.parse(args[0]))
+end
+
 def literalNewline(args)
     print args[0].gsub(/\r{0,1}\n/, "\\n")
 end
