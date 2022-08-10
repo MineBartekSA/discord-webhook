@@ -129,4 +129,17 @@ runs:
       run: |
         $env:DATA += '"content":"' + $env:CONTENT.replace("`n", "\n") + '"}'
         $head = @{'Content-Type'='application/json'}
-        Invoke-RestMethod -Uri ${{ inputs.webhook }} -Method 'POST' -Body $env:DATA -Headers $head
+        try {
+          Invoke-RestMethod -Uri ${{ inputs.webhook }} -Method 'POST' -Body $env:DATA -Headers $head
+        } catch {
+          Write-Output "HTTP" $._.Exception.Response.StatusCode.value__
+          Write-Output "::error title=Faild to send message::Discord did not respond with expected status."
+          "## Discord Error" >> $env:GITHUB_STEP_SUMMARY
+          "```" >> $env:GITHUB_STEP_SUMMARY
+          $reader = New-Object System.IO.StreamReader($result)
+          $reader.BaseStream.Position = 0
+          $reader.DiscardBufferedData()
+          $reader.ReadToEnd() | ConvertFrom-Json | ConvertTo-Json >> $env:GITHUB_STEP_SUMMARY
+          "```" >> $env:GITHUB_STEP_SUMMARY
+          exit 22
+        }
