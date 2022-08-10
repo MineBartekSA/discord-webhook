@@ -7,11 +7,11 @@ jobs:
   test:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Test the most basic usage'
-        uses: MineBartekSA/discord-webhook@main
-        with:
-          webhook: ${{ secrets.WEBHOOK }}
-          content: "Hello\nTest multiline content\n\\\"Testing\\\" hehe"
+      # - name: 'Test the most basic usage'
+      #   uses: MineBartekSA/discord-webhook@main
+      #   with:
+      #     webhook: ${{ secrets.WEBHOOK }}
+      #     content: "Hello\nTest multiline content\n\\\"Testing\\\" hehe"
       - name: 'Test basic embed'
         uses: MineBartekSA/discord-webhook@main
         with:
