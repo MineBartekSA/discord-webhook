@@ -1,5 +1,6 @@
 # Helper methods for the discord-webhook action
 
+require 'yaml'
 require 'json'
 
 def literalNewline(args)
@@ -7,7 +8,14 @@ def literalNewline(args)
 end
 
 def handleJson(args)
-    json = args[0].dup
+    json = args[0].dup.lstrip.rstrip
+    return if json.size == 0
+    if json[0] != "{" && json[0] != "["
+        begin
+            print JSON.generate(YAML.load(json))
+            return
+        end
+    end
     i = -1
     replace = ""
     while (i = i + 1) < json.size do
