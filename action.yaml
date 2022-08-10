@@ -118,7 +118,7 @@ runs:
         then
           echo "::error title=Faild to send message::Discord did not respond with expected status."
           echo "## Discord Error" >> $GITHUB_STEP_SUMMARY
-          echo "```$(cat $TMP)```" >> $GITHUB_STEP_SUMMARY
+          cat $TMP >> $GITHUB_STEP_SUMMARY
           exit 22
         fi
     - name: 'Send webhook message on Windows'
