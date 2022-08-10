@@ -107,12 +107,14 @@ runs:
         CONTENT: ${{ inputs.content }}
       run: |
         DATA="$DATA\"content\":\"$(ruby $GITHUB_ACTION_PATH/utils.ru literalNewline "$CONTENT")\"}"
+        TMP=$(mktemp)
         curl -i \
           -H "Accept: application/json" \
           -H "Content-Type: application/json" \
           -X POST \
           --data "$DATA" \
-          ${{ inputs.webhook }}
+          ${{ inputs.webhook }} > $TMP
+        [ -s $TMP ] && echo "::error title=Non-204 response::Discord did not respond with expected status.\nResponse: $(cat $TMP)"
     - name: 'Send webhook message on Windows'
       if: runner.os == 'Windows'
       shell: pwsh
