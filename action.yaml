@@ -101,7 +101,6 @@ runs:
         [ "${EMBED:0:1}" != "[" ] && EMBED="[$EMBED]"
         echo "DATA=$DATA\"embeds\":$EMBED," > $GITHUB_ENV
     - name: 'Send webhook message'
-      if: runner.os != 'Windows'
       shell: bash
       env:
         CONTENT: ${{ inputs.content }}
@@ -121,21 +120,3 @@ runs:
           ruby $GITHUB_ACTION_PATH/utils.ru prettyJson "$(cat $TMP)" >> $GITHUB_STEP_SUMMARY
           exit 22
         fi
-    - name: 'Send webhook message on Windows'
-      if: runner.os == 'Windows'
-      shell: pwsh
-      env:
-        CONTENT: ${{ inputs.content }}
-      run: |
-        try {
-          $env:DATA += '"content":"' + $env:CONTENT.replace("`n", "\n") + '"}'
-          $response = Invoke-WebRequest -Uri ${{ inputs.webhook }} -Method 'POST' -Body $env:DATA -Headers @{'Content-Type'='application/json'}
-        } catch {
-          $response = $_.Exception.Response
-          Write-Output "::error title=Faild to send message::Discord did not respond with expected status."
-          "## Discord Error" >> $env:GITHUB_STEP_SUMMARY
-          "``````" >> $env:GITHUB_STEP_SUMMARY
-          ($_.ErrorDetails.Message | ConvertFrom-Json | ConvertTo-Json -Depth 20) >> $env:GITHUB_STEP_SUMMARY
-          "``````" >> $env:GITHUB_STEP_SUMMARY
-          exit 22
-        }
