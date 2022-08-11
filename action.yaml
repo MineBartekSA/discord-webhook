@@ -135,8 +135,7 @@ runs:
           Write-Output "::error title=Faild to send message::Discord did not respond with expected status."
           "## Discord Error" >> $env:GITHUB_STEP_SUMMARY
           "``````" >> $env:GITHUB_STEP_SUMMARY
-          ($_.ErrorDetails.Message | ConvertFrom-Json | ConvertTo-Json) >> $env:GITHUB_STEP_SUMMARY
+          ($_.ErrorDetails.Message | ConvertFrom-Json | ConvertTo-Json -Depth 20) >> $env:GITHUB_STEP_SUMMARY
           "``````" >> $env:GITHUB_STEP_SUMMARY
           exit 22
         }
-        Write-Output "HTTP/$($response.Version.ToString()) $($response.StatusCode.value__)"
