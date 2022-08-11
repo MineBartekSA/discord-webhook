@@ -4,7 +4,7 @@ require 'yaml'
 require 'json'
 
 def prettyJson(args)
-    print "```\n" + JSON.pretty_generate(JSON.parse(args[0])) + "\n```\n"
+    print JSON.pretty_generate(JSON.parse(args[0]))
 end
 
 def literalNewline(args)
@@ -14,15 +14,15 @@ end
 def handleJson(args)
     json = args[0].dup.lstrip.rstrip
     return if json.size == 0
-    if json[0] != "{" && json[0] != "["
+    if json[0] != "{" && json[0] != "[" # Try to parse YAML if there are no signs it's JSON
         begin
-            print JSON.generate(YAML.load(json))
+            print JSON.generate YAML.load(json)
             return
         end
     end
     i = -1
     replace = ""
-    while (i = i + 1) < json.size do
+    while (i = i + 1) < json.size do # If YAML parsing fails, assume JSON and celan it
         if json[i] == "\n"
             cr = json[i - 1] == "\r" ? 1 : 0
             json[i - cr..i] = replace
@@ -30,7 +30,7 @@ def handleJson(args)
             replace = replace == "" ? "\\n" : ""
         end
     end
-    print JSON.generate(JSON.parse(json))
+    print JSON.generate JSON.parse(json)
 end
 
 exit 0 if ARGV.size < 1

@@ -23,7 +23,7 @@ inputs:
     required: false
     default: ''
   tts:
-    description: 'Set message as TTS'
+    description: 'Message TTS flag'
     required: false
     default: 'false'
   allowed_mentions:
@@ -39,7 +39,11 @@ inputs:
     required: false
     default: ''
   embed:
-    description: 'JSON string of the embed object, or embed array'
+    description: 'JSON or YAML string of the embed object or array'
+    required: false
+    default: ''
+  component:
+    description: 'JSON or YAML string of the component object or array'
     required: false
     default: ''
 
@@ -100,6 +104,15 @@ runs:
         EMBED=$(ruby $GITHUB_ACTION_PATH/utils.ru handleJson "$EMBED")
         [ "${EMBED:0:1}" != "[" ] && EMBED="[$EMBED]"
         echo "DATA=$DATA\"embeds\":$EMBED," > $GITHUB_ENV
+    - name: 'Handle component'
+      if: inputs.component != ''
+      shell: bash
+      env:
+        COMPONENT: ${{ inputs.component }}
+      run: |
+        COMPONENT=$(ruby $GITHUB_ACTION_PATH/utils.ru handleJson "$COMPONENT")
+        [ "${COMPONENT:0:1}" != "[" ] && COMPONENT="[$COMPONENT]"
+        echo "DATA=$DATA\"components\":[{\"type\":1,\"components\":$COMPONENT}]," > $GITHUB_ENV
     - name: 'Send webhook message'
       shell: bash
       env:
@@ -116,7 +129,8 @@ runs:
         if [ -s $TMP ]
         then
           echo "::error title=Faild to send message::Discord did not respond with expected status."
-          echo "## Discord Error" >> $GITHUB_STEP_SUMMARY
+          echo "## Discord Error\n\`\`\`" >> $GITHUB_STEP_SUMMARY
           ruby $GITHUB_ACTION_PATH/utils.ru prettyJson "$(cat $TMP)" >> $GITHUB_STEP_SUMMARY
+          echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
           exit 22
         fi
