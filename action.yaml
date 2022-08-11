@@ -133,6 +133,7 @@ runs:
         } catch {
           $response = $_.Exception.Response
           Write-Output "::error title=Faild to send message::Discord did not respond with expected status."
+          Write-Output $_.ErrorDetails.Message.toString()
           "## Discord Error" >> $env:GITHUB_STEP_SUMMARY
           "``````" >> $env:GITHUB_STEP_SUMMARY
           ($_.ErrorDetails.Message | ConvertFrom-Json | ConvertTo-Json) >> $env:GITHUB_STEP_SUMMARY
