@@ -131,7 +131,7 @@ runs:
           echo "::error title=Faild to send message::Discord did not respond with expected status."
           echo "## Discord Error" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          ERR=ruby $GITHUB_ACTION_PATH/utils.ru prettyJson "$(cat $TMP)"
+          ERR=$(ruby $GITHUB_ACTION_PATH/utils.ru prettyJson "$(cat $TMP)")
           echo "$ERR"
           echo "$ERR" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
