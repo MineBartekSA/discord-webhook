@@ -36,7 +36,7 @@ end
 def _endJson(args, data)
     data = [data] if !data.kind_of?(Array)
     if args[1] == "comp"
-        data = {"type" => 1, "components" => data} if data[0]["type"] != 1
+        data = [{"type" => 1, "components" => data}] if data[0]["type"] != 1
     elsif args[1] == "file"
         attachments = []
         form = ""
