@@ -73,7 +73,7 @@ jobs:
     steps:
       - name: Prepare
         shell: bash
-        run: wget https://http.cat/100
+        run: curl https://http.cat/100 > 100
       - name: Test a complex message on Windows
         uses: MineBartekSA/discord-webhook@main
         with:
