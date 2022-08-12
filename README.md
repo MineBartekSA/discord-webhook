@@ -16,9 +16,11 @@ You can even uplaod files to Discord.
     webhook: ${{ secrets.WEBHOOK_URL }}
     content: Hello Discord
 ```
-> **Note:** There is no runner restriction. Any will do.
+> **Note**
+> There is no runner restriction. Any will do.
 
-> **⚠️Warning:** Do not use this action multiple times in a single job! This is due a bug in Github Actions.\
+> **Warning**
+> Do not use this action multiple times in a single job! This is due a bug in Github Actions.\
 > You can read about it more [here](https://github.com/actions/runner/issues/789) or on the [fix PR](https://github.com/actions/runner/pull/1794) that is merged but not deployed _(as of 10.08.2022)_.
 
 For debuging purpouses, it is strongly suggested to add `/v10/` path segment after the `/api/` segment in your webhook url.
