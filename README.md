@@ -5,7 +5,7 @@ Github Actions for sending messages through Discord's Webhooks
 Unlike other actions, this action is based on composite actions, meaning it doesn't need to build and works on every runner.
 
 Using this action you can send simple or complex messages.
-You can even uplaod files to Discord.
+You can even upload files to Discord.
 
 ## Usage
 
