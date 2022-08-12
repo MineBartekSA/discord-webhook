@@ -121,7 +121,9 @@ runs:
       env:
         ATTACHMENT: ${{ inputs.attachment }}
       run: |
-        IFS=$'\n' read -r -d '' -a FILE_DATA < <(ruby $GITHUB_ACTION_PATH/utils.ru handleJson "$ATTACHMENT" file)
+        IFS=$'\n'
+        FILE_DATA=( $(ruby $GITHUB_ACTION_PATH/utils.ru handleJson "$ATTACHMENT" file) )
+        IFS=" "
         echo $FILE_DATA
         echo "DATA=$DATA\"attachments\":${FILE_DATA[0]}," > $GITHUB_ENV
         echo "FORM=${FILE_DATA[1]}" >> $GITHUB_ENV
