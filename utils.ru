@@ -6,7 +6,7 @@ require 'json'
 def prettyJson(args)
     begin
         puts JSON.pretty_generate(JSON.parse(args[0]))
-    catch
+    rescue
         puts "Failed to Pretty Print JSON! Raw data:"
         puts args[0]
     end
