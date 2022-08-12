@@ -16,7 +16,7 @@ def handleJson(args)
     return if json.size == 0
     if json[0] != "{" && json[0] != "[" # Try to parse YAML if there are no signs it's JSON
         begin
-            print JSON.generate YAML.load(json)
+            _endJson args, YAML.load(json)
             return
         end
     end
@@ -30,7 +30,15 @@ def handleJson(args)
             replace = replace == "" ? "\\n" : ""
         end
     end
-    print JSON.generate JSON.parse(json)
+    _endJson args, JSON.parse(json)
+end
+
+def _endJson(args, data)
+    if args.size > 1 && args[1] == "comp"
+        type = (data.kind_of?(Array) ? data : (data = [data]))[0]["type"]
+        data = {"type" => 1, "components" => data} if type != 1
+    end
+    print JSON.generate data
 end
 
 exit 0 if ARGV.size < 1

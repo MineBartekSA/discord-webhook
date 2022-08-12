@@ -110,9 +110,9 @@ runs:
       env:
         COMPONENT: ${{ inputs.component }}
       run: |
-        COMPONENT=$(ruby $GITHUB_ACTION_PATH/utils.ru handleJson "$COMPONENT")
+        COMPONENT=$(ruby $GITHUB_ACTION_PATH/utils.ru handleJson "$COMPONENT" comp)
         [ "${COMPONENT:0:1}" != "[" ] && COMPONENT="[$COMPONENT]"
-        echo "DATA=$DATA\"components\":[{\"type\":1,\"components\":$COMPONENT}]," > $GITHUB_ENV
+        echo "DATA=$DATA\"components\":$COMPONENT," > $GITHUB_ENV
     - name: 'Send webhook message'
       shell: bash
       env:
