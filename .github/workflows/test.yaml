@@ -1,70 +1,101 @@
-name: Discord Webhook tests
+name: Composite Discord Webhooks Action tests
 
 on:
   workflow_dispatch
 
 jobs:
-  test:
+  lin-test:
     runs-on: ubuntu-latest
     steps:
-      - name: 'Test basic embed'
+      - name: Prepare
+        shell: bash
+        run: wget https://http.cat/100
+      - name: Test a complex message on Linux
         uses: MineBartekSA/discord-webhook@main
         with:
           webhook: ${{ secrets.WEBHOOK }}
-          content: "Hello\nTest multiline content"
           username: Linux
-          embed: '{
-              "title": "Test",
-              "description": "Testing....
-
-              Yeah, all to plan",
-              "color": 65535
-            }'
+          content: |
+            Multiline text test.
+            Working as expexted!
+          embed: |
+            title: Hello there!
+            description: |
+              In here, you can also
+              make multiline strings
+            fields:
+              - name: Field one
+                value: 1
+              - name: Field two
+                value: 2
+            image:
+              url: attachment://image.jpg
+            footer:
+              text: Footer text
+          attachment: |
+            file: 100
+            filename: image.jpg
 
   mac-test:
     runs-on: macos-latest
     steps:
-      - name: 'Test Discord Webhook action on mac'
+      - name: Prepare
+        shell: bash
+        run: wget https://http.cat/100
+      - name: Test a complex message on Mac
         uses: MineBartekSA/discord-webhook@main
         with:
           webhook: ${{ secrets.WEBHOOK }}
-          content: "Hello from Mac\nIndeed"
           username: Mac
-          embed: '{
-              "title": "Test on mac",
-              "description": "Testing....
-
-              You know what? This works",
-              "color": 65535
-            }'
+          content: |
+            Multiline text test.
+            Working as expexted!
+          embed: |
+            title: Hello there!
+            description: |
+              In here, you can also
+              make multiline strings
+            fields:
+              - name: Field one
+                value: 1
+              - name: Field two
+                value: 2
+            image:
+              url: attachment://image.jpg
+            footer:
+              text: Footer text
+          attachment: |
+            file: 100
+            filename: image.jpg
 
   win-test:
     runs-on: windows-latest
     steps:
-      - name: 'Test Discord Webhook action on windows'
+      - name: Prepare
+        shell: bash
+        run: wget https://http.cat/100
+      - name: Test a complex message on Windows
         uses: MineBartekSA/discord-webhook@main
         with:
           webhook: ${{ secrets.WEBHOOK }}
-          content: "Hello from windows\nMultiline"
           username: Windows
-          tts: "true"
-          embed: '[
-              {
-                "title": "First
-
-                embed",
-                "description": "One
-
-                line",
-                "color": 65535
-              },
-              {
-                "title": "Second
-
-                embed",
-                "description": "Two
-
-                line",
-                "color": 16711680
-              }
-            ]'
+          content: |
+            Multiline text test.
+            Working as expexted!
+          embed: |
+            title: Hello there!
+            description: |
+              In here, you can also
+              make multiline strings
+            fields:
+              - name: Field one
+                value: 1
+              - name: Field two
+                value: 2
+            image:
+              url: attachment://image.jpg
+            footer:
+              text: Footer text
+          attachment: |
+            file: 100
+            filename: image.jpg
