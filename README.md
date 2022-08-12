@@ -145,7 +145,7 @@ An example of embed using JSON
         "title": "Embed Title",
         "description": "Multiline embed
         description here
-        (this is agains the official JSON spec, but for convinience this action support this",
+        (this is against the official JSON spec, but for convenience this action support this)",
         "color": 16711680
       }
 ```
