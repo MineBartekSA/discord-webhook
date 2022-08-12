@@ -4,7 +4,12 @@ require 'yaml'
 require 'json'
 
 def prettyJson(args)
-    print JSON.pretty_generate(JSON.parse(args[0])) + "\n"
+    begin
+        puts JSON.pretty_generate(JSON.parse(args[0]))
+    catch
+        puts "Failed to Pretty Print JSON! Raw data:"
+        puts args[0]
+    end
 end
 
 def literalNewline(args)

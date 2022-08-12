@@ -135,7 +135,7 @@ runs:
           -F payload_json="$DATA" \
           $FORM \
           ${{ inputs.webhook }} 2> $TMP)
-        tail -n 1 $TMP
+        cat $TMP
         if [[ "$(tail -n 1 $TMP | cut -d" " -f2)" != 2* ]]
         then
           echo "::error title=Faild to send message::Discord did not respond with expected status."
