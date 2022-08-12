@@ -34,10 +34,21 @@ def handleJson(args)
 end
 
 def _endJson(args, data)
-    if args.size > 1 && args[1] == "comp"
-        type = (data.kind_of?(Array) ? data : (data = [data]))[0]["type"]
-        data = {"type" => 1, "components" => data} if type != 1
-    end
+    data = [data] if !data.kind_of?(Array)
+    if args[1] == "comp"
+        data = {"type" => 1, "components" => data} if data[0]["type"] != 1
+    elsif args[1] == "file"
+        attachments = []
+        form = ""
+        data.each_with_index do |info, i|
+            raise "upload entry #{i}: No file provided" if info["file"] == nil
+            form += "-F files[#{i}]=@#{info["file"]} "
+            attachments << info.update({"id" => i}).reject { |k, _| k == "file" }
+        end
+        puts JSON.generate attachments
+        puts form
+        return
+    end if args.size > 1
     print JSON.generate data
 end
 

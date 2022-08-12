@@ -46,6 +46,10 @@ inputs:
     description: 'JSON or YAML string of the component object or array'
     required: false
     default: ''
+  attachment:
+    description: 'JSON or YAML string of the attachment object or array with aditional file field indicating the path to the file'
+    required: false
+    default: ''
 
 runs:
   using: 'composite'
@@ -102,7 +106,6 @@ runs:
         EMBED: ${{ inputs.embed }}
       run: |
         EMBED=$(ruby $GITHUB_ACTION_PATH/utils.ru handleJson "$EMBED")
-        [ "${EMBED:0:1}" != "[" ] && EMBED="[$EMBED]"
         echo "DATA=$DATA\"embeds\":$EMBED," > $GITHUB_ENV
     - name: 'Handle component'
       if: inputs.component != ''
@@ -111,8 +114,16 @@ runs:
         COMPONENT: ${{ inputs.component }}
       run: |
         COMPONENT=$(ruby $GITHUB_ACTION_PATH/utils.ru handleJson "$COMPONENT" comp)
-        [ "${COMPONENT:0:1}" != "[" ] && COMPONENT="[$COMPONENT]"
         echo "DATA=$DATA\"components\":$COMPONENT," > $GITHUB_ENV
+    - name: 'Handle attachment'
+      if: inputs.attachment != ''
+      shell: bash
+      env:
+        ATTACHMENT: ${{ inputs.attachment }}
+      run: |
+        IFS=$'\n' read -r -d '' -a FILE_DATA < <(ruby $GITHUB_ACTION_PATH/utils.ru handleJson "$ATTACHMENT" file)
+        echo "DATA=$DATA\"attachments\":${FILE_DATA[0]}," > $GITHUB_ENV
+        echo "FORM=${FILE_DATA[1]}" >> $GITHUB_ENV
     - name: 'Send webhook message'
       shell: bash
       env:
@@ -120,18 +131,17 @@ runs:
       run: |
         DATA="$DATA\"content\":\"$(ruby $GITHUB_ACTION_PATH/utils.ru literalNewline "$CONTENT")\"}"
         TMP=$(mktemp)
-        curl -w "%{stderr}HTTP/%{http_version} %{http_code}\n" \
-          -H "Accept: application/json" \
-          -H "Content-Type: application/json" \
-          -X POST \
-          --data "$DATA" \
-          ${{ inputs.webhook }} > $TMP
-        if [ -s $TMP ]
+        OUT=$(curl -w "%{stderr}HTTP/%{http_version} %{http_code}\n" \
+          -F payload_json="$DATA" \
+          $FORM \
+          ${{ inputs.webhook }} 2> $TMP)
+        tail -n 1 $TMP
+        if [[ "$(tail -n 1 $TMP | cut -d" " -f2)" != 2* ]]
         then
           echo "::error title=Faild to send message::Discord did not respond with expected status."
           echo "## Discord Error" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
-          ERR=$(ruby $GITHUB_ACTION_PATH/utils.ru prettyJson "$(cat $TMP)")
+          ERR=$(ruby $GITHUB_ACTION_PATH/utils.ru prettyJson "$OUT")
           echo "$ERR"
           echo "$ERR" >> $GITHUB_STEP_SUMMARY
           echo "\`\`\`" >> $GITHUB_STEP_SUMMARY
