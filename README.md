@@ -1,6 +1,6 @@
 # Composite Discord Webhooks
 
-Github Actions for sending messages through Discord's Webhooks
+Github Actions for sending messages through Discord's Webhooks.
 
 Unlike other actions, this action is based on composite actions, meaning it doesn't need to build and works on every runner.
 
@@ -23,7 +23,7 @@ You can even upload files to Discord.
 > Do not use this action multiple times in a single job! This is due a bug in Github Actions.\
 > You can read about it more [here](https://github.com/actions/runner/issues/789) or on the [fix PR](https://github.com/actions/runner/pull/1794) that is merged but not deployed _(as of 10.08.2022)_.
 
-For debuging purpouses, it is strongly suggested to add `/v10/` path segment after the `/api/` segment in your webhook url.
+For debugging purposes, it is strongly suggested to add `/v10/` path segment after the `/api/` segment in your webhook url.
 
 ## Inputs
 
@@ -62,7 +62,7 @@ Be aware that error reporting was not designed with this in mind.
       Be sure to use it well!
 ```
 > **Note**
-> You do not need to use secrets to insert your webhook, but it is a good practice
+> You do not need to use secrets to insert your webhook, but it is a good practice.
 
 ### 2. Username and Avatar URL
 
@@ -278,7 +278,7 @@ An example of component usage with multiple rows using YAML
 
 Using this input, you can upload files.
 
-This input accepts YAML and JSON strings of the attachment object with a additional `file` field.
+This input accepts YAML and JSON strings of the attachment object with an additional `file` field.
 To see available fields, see the [official Discord docs](https://discord.com/developers/docs/resources/channel#attachment-object) on this subject.
 
 The additional `file` field is always required and is for setting the path to the file you want to upload.
