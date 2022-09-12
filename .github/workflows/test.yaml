@@ -10,6 +10,14 @@ jobs:
       - name: Prepare
         shell: bash
         run: wget https://http.cat/100
+      - name: Test simple message on Linux
+        uses: MineBartekSA/discord-webhook@main
+        with:
+          webhook: ${{ secrets.WEBHOOK }}
+          username: Linux
+          content: |
+            Simple message!
+            Here we go!
       - name: Test a complex message on Linux
         uses: MineBartekSA/discord-webhook@main
         with:
@@ -42,6 +50,14 @@ jobs:
       - name: Prepare
         shell: bash
         run: wget https://http.cat/100
+      - name: Test simple message on Mac
+        uses: MineBartekSA/discord-webhook@main
+        with:
+          webhook: ${{ secrets.WEBHOOK }}
+          username: Mac
+          content: |
+            Simple message!
+            Here we go!
       - name: Test a complex message on Mac
         uses: MineBartekSA/discord-webhook@main
         with:
@@ -74,6 +90,14 @@ jobs:
       - name: Prepare
         shell: bash
         run: curl https://http.cat/100 > 100
+      - name: Test simple message on Windows
+        uses: MineBartekSA/discord-webhook@main
+        with:
+          webhook: ${{ secrets.WEBHOOK }}
+          username: Windows
+          content: |
+            Simple message!
+            Here we go!
       - name: Test a complex message on Windows
         uses: MineBartekSA/discord-webhook@main
         with:
