@@ -13,7 +13,7 @@ def prettyJson(args)
 end
 
 def literalNewline(args)
-    print args[0].gsub(/\r{0,1}\n/, "\\n")
+    print args[0].gsub(/\r{0,1}\n/, "\\n").gsub(/\\[^n]|"/) { |s| (s.size == 1 ? "\\" : "\\\\") + s }
 end
 
 def handleJson(args)
