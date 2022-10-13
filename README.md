@@ -1,6 +1,6 @@
 # Composite Discord Webhooks
 
-Github Actions for sending messages through Discord's Webhooks.
+GitHub Action for sending messages through Discord's Webhooks.
 
 Unlike other actions, this action is based on composite actions, meaning it doesn't need to build and works on every runner.
 
